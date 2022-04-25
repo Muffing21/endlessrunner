@@ -13,13 +13,18 @@ let config = {
     
   }
 
+  //global variable
+// global variables
+let cursors;
+let currentScene = 0;
+const SCALE = 0.5;
+const tileSize = 35;
+
 let game = new Phaser.Game(config);
 
 // set UI sizes
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
-//Key A is move left.
-//Key W is jump.
-//Key D is move right.
+//Key SPACE is start the game.
 let keySPACE, keyRULE, keyMENU;

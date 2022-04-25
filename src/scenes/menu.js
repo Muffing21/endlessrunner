@@ -1,8 +1,3 @@
-//ZhiBin Huang
-//1800336
-//CMPM 120 Spring 2022.
-
-
 class Menu extends Phaser.Scene {
     constructor() {
         super("menuScene");
@@ -38,12 +33,6 @@ class Menu extends Phaser.Scene {
         menuConfig.backgroundColor = '#00FF00';
         this.add.text(game.config.width/2, game.config.height/3 - borderUISize - borderPadding, 'Eternal Halloween', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Press SPACE to play', menuConfig).setOrigin(0.5);
-
-        
-        
-        
-        
-
 
         // define keys
         //keyRIGHT = this.input.keyboard.addkey(Phaser.Input.KeyCodes.RIGHT);
