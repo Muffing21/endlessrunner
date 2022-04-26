@@ -27,4 +27,4 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 //Key SPACE is start the game.
-let keySPACE, keyRULE, keyMENU;
+let keySPACE, keyRULE, keyMENU, keyRIGHT, keyLEFT;

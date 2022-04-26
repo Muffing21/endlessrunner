@@ -32,8 +32,10 @@ class Play extends Phaser.Scene {
         //image for skeleton movement
         this.load.spritesheet('skeleton_run', './assets/Skeleton_Sprite_Sheet.png', {frameWidth: 128, frameHeight: 128, startFrame: 0, endFrame: 7})
 
+
         //image for cat
         this.load.image('catIdle', './assets/cat.png');
+        this.load.spritesheet('cat_run','./assets/cat_run.png',{frameWidth: 128, frameHeight: 128, startFrame: 0, endFrame: 7});
 
         //image for platform
         this.load.image('platform', './assets/platform.png');
@@ -44,12 +46,32 @@ class Play extends Phaser.Scene {
         this.load.image('arrowKey', 'arrowKey.png');
         this.load.image('talltrees', 'talltrees.png');
         this.load.image('groundScroll', 'ground.png');
-        this.load.spritesheet('cat_run','cat_run.png',{frameWidth: 128, frameHeight: 128, startFrame: 0, endFrame: 7});
+        
         this.load.atlasXML('shooter_atlas', 'shooter_sheet.png', 'shooter_sheet.xml');
+
+        
 
     }
 
     create(){
+
+        //declare animations
+        this.anims.create({
+            key: 'cat_run',
+            
+            frames: this.anims.generateFrameNumbers('cat_run',{frames: [0, 1, 2, 3, 4, 5, 6, 7]}),
+            frameRate: 16,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'skeleton_run',
+            frames: this.anims.generateFrameNumbers('skeleton_run',{frames: [0, 1, 2, 3, 4, 5, 6, 7]}),
+            frameRate: 16,
+            repeat: -1
+        });
+        
+
         // place tile sprite
         this.forest = this.add.tileSprite(0, 0, 1200, 700, 'play_bg').setOrigin(0,0);
 
@@ -81,7 +103,8 @@ class Play extends Phaser.Scene {
 
 
         //set up my son
-        this.cat = this.physics.add.sprite(game.config.width/2, game.config.height/6, 'cat_run').setScale(SCALE);
+        this.cat = this.physics.add.sprite(game.config.width/2, game.config.height - borderUISize - borderPadding, 'cat_run').setScale(SCALE);
+        this.skeleton = this.physics.add.sprite(game.config.width/20, game.config.height - borderUISize - borderPadding, 'skeleton_run').setScale(SCALE);
         
         //var ground = platforms.create(0, game.config.height - borderUISize*2, groundIG);
 
@@ -91,7 +114,7 @@ class Play extends Phaser.Scene {
 
 
 
-        this.playerJumps = 0;
+        //this.playerJumps = 0;
 
         //this.addPlatform(game.config.width, game.config.width/2);
         
@@ -105,12 +128,17 @@ class Play extends Phaser.Scene {
           //space bar is jump
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyMENU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
         
         //check for input
         //this.input.on("SPACE", this.jump, this);
         this.animStarted = false;
       
-
+       this.skeleton.anims.play('skeleton_run');
+        
+       this.cat.anims.play('cat_run');
     
 
         // platforms are added from the pool
@@ -151,11 +179,23 @@ class Play extends Phaser.Scene {
     // }
 
     update(){
-        if(Phaser.Input.Keyboard.JustDown(keySPACE)){
-            let run = this.add.sprite(this.cat.x, this.cat.y, 'skeleton_run').setOrigin(0,0);
-            run.anims.play('skeleton_run');
-            this.animStarted==true;
+        
+        if(keyLEFT.isDown){
+            this.cat.setAccelerationX(100);
+            
         }
+        else{
+            this.cat.setAccelerationX(0);
+        }
+
+        if(keyRIGHT.isDown){
+            this.cat.setAccelerationX(100);
+        }
+        else{
+            this.cat.setAccelerationX(0);
+        }
+
+        
         if(this.cat.y > game.config.height){
             gameOver = true;
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
@@ -197,4 +237,6 @@ class Play extends Phaser.Scene {
 
 
     }
+
+    
 }
