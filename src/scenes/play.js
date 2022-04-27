@@ -104,8 +104,13 @@ class Play extends Phaser.Scene {
 
         //set up my son
         this.cat = this.physics.add.sprite(game.config.width/2, game.config.height - borderUISize - borderPadding, 'cat_run').setScale(SCALE);
+        this.cat.body.setGravity(0, 300)
+        
+        //set up skeleton chasing you
         this.skeleton = this.physics.add.sprite(game.config.width/20, game.config.height - borderUISize - borderPadding, 'skeleton_run').setScale(SCALE);
         
+
+
         //var ground = platforms.create(0, game.config.height - borderUISize*2, groundIG);
 
         //ground.scale.setTo(2, 2);
@@ -126,10 +131,11 @@ class Play extends Phaser.Scene {
         //this.physics.add.collider(this.catIdle, platforms);
 
           //space bar is jump
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        keyMENU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        //keyMENU = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        //keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        //keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        this.cursors = this.input.keyboard.createCursorKeys();
 
         
         //check for input
@@ -145,7 +151,7 @@ class Play extends Phaser.Scene {
 
         //borrowed code from Emanuele Feronato
         
-
+        this.cat.setDrag(5000);
     }
 
     // addPlatform(platformWidth, posX) {
@@ -180,19 +186,12 @@ class Play extends Phaser.Scene {
 
     update(){
         
-        if(keyLEFT.isDown){
-            this.cat.setAccelerationX(100);
-            
-        }
-        else{
-            this.cat.setAccelerationX(0);
-        }
 
-        if(keyRIGHT.isDown){
-            this.cat.setAccelerationX(100);
+        if(this.cursors.right.isDown){
+            this.cat.setAccelerationX(200)
         }
-        else{
-            this.cat.setAccelerationX(0);
+        if(this.cursors.left.isDown){
+            this.cat.setAccelerationX(-200);
         }
 
         
@@ -202,7 +201,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACEBAR to Restart or Q to Menu', scoreConfig).setOrigin(0.5);
         }
         
-        this.cat.x = gameOptions.playerStartPosition;
+        //this.cat.x = gameOptions.playerStartPosition;
 
         /*
         let minDistance = game.config.width;
@@ -224,7 +223,7 @@ class Play extends Phaser.Scene {
         // }
         
         // moves the tile sprite
-        this.forest.tilePositionX += 4;
+        this.forest.tilePositionX += 6;
 
         //game start or restart.
         if(this.gameOver == true && Phaser.Input.Keyboard.JustDown(keyMENU)) {
