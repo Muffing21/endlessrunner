@@ -18,6 +18,7 @@ class Play extends Phaser.Scene {
 
          //image for background
         this.load.image('play_bg', './assets/playBackground.png');
+        this.load.image('play_bg2', './assets/play_bg2.png');
 
         //image for block
         this.load.image('tool0', './assets/tool0.png');
@@ -38,6 +39,7 @@ class Play extends Phaser.Scene {
         //image for cat
         this.load.image('catIdle', './assets/cat.png');
         this.load.spritesheet('cat_run','./assets/cat_run.png',{frameWidth: 128, frameHeight: 128, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('cat_jump', './assets/cat_jump.png', {frameWidth: 128, frameHeight: 128, startFrame: 0, endFrame: 5});
 
         //image for platform
         this.load.image('platform', './assets/platform.png');
@@ -58,6 +60,8 @@ class Play extends Phaser.Scene {
         this.SCROLL_SPEED = 4;
         currentScene = 3;
         this.physics.world.gravity.y = 2600;
+        this.timeScene1 = 10000;
+        this.changeScene = false;
 
         // add tile sprite
         this.talltrees = this.add.tileSprite(0, 0, 1200, 700, 'play_bg').setOrigin(0,0);
@@ -88,7 +92,7 @@ class Play extends Phaser.Scene {
             var Block = this.physics.add.sprite(400, 635,"tool0").setScale(SCALE).setOrigin(0);
             Block.body.immovable =true ;
             Block.body.allowGravity = false;
-            Block.body.setVelocityX(-100);
+            Block.body.setVelocityX(-400);
             this.block0.add(Block);
         }
 
@@ -97,7 +101,7 @@ class Play extends Phaser.Scene {
             var Block1 = this.physics.add.sprite(650, 545,"tool1").setScale(SCALE).setOrigin(0);
             Block1.body.immovable =true ;
             Block1.body.allowGravity = false;
-            Block1.body.setVelocityX(-100);
+            Block1.body.setVelocityX(-400);
             this.block1.add(Block1);
         }
         
@@ -106,7 +110,7 @@ class Play extends Phaser.Scene {
             var Block2 = this.physics.add.sprite(900, 570,"tool2").setScale(SCALE).setOrigin(0);
             Block2.body.immovable =true ;
             Block2.body.allowGravity = false;
-            Block2.body.setVelocityX(-100);
+            Block2.body.setVelocityX(-400);
             this.block2.add(Block2);
         }
 
@@ -115,10 +119,12 @@ class Play extends Phaser.Scene {
             var Block3 = this.physics.add.sprite(1200, 570,"tool3").setScale(SCALE).setOrigin(0);
             Block3.body.immovable =true ;
             Block3.body.allowGravity = false;
-            Block3.body.setVelocityX(-100);
+            Block3.body.setVelocityX(-400);
             this.block3.add(Block3);
         }
- 
+        
+        
+
         this.anims.create({
             key: 'cat_run',
             
@@ -133,6 +139,13 @@ class Play extends Phaser.Scene {
             frameRate: 16,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'cat_jump',
+            frames: this.anims.generateFrameNumbers('cat_jump',{frames: [0, 1, 2, 3, 4, 5]}),
+            frameRate: 6,
+            repeat: 0
+        });
         
         // set up my cat son
         this.cat = this.physics.add.sprite(300, game.config.height/2-tileSize, 'cat_run').setScale(SCALE);
@@ -140,6 +153,8 @@ class Play extends Phaser.Scene {
         this.skeleton = this.physics.add.sprite(100, game.config.height/100-tileSize, 'skeleton_run').setScale(SCALE);
         this.skeleton.anims.play('skeleton_run');
         //this.skeleton = this.physics.add.sprite(120, game.config.height/2-tileSize, 'skeleton_run').setScale(SCALE);
+        this.catCollide = this.add.group();
+        this.catCollide.add(this.cat);
 
         // add arrow key graphics as UI
         this.upKey = this.add.sprite(64, 32, 'arrowKey');
@@ -160,11 +175,20 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.cat, this.ground);
         this.physics.add.collider(this.skeleton, this.ground);
 
+        
+        this.physics.add.collider(this.cat, this.block0);
+        this.physics.add.collider(this.cat, this.block1);
+        this.physics.add.collider(this.cat, this.block2);
+        this.physics.add.collider(this.cat, this.block3);
+        //this.physics.add.collider(this.skeleton, this.catCollider);
+        
+
+
         // set up Scene switcher
         //this.input.keyboard.on('keydown', sceneSwitcher);
     }
 
-    update() {
+    update(delta) {
         // update tile sprites (tweak for more "speed")
         this.talltrees.tilePositionX += this.SCROLL_SPEED;
         this.groundScroll.tilePositionX += this.SCROLL_SPEED;
@@ -173,12 +197,24 @@ class Play extends Phaser.Scene {
 	    this.cat.isGrounded = this.cat.body.touching.down;
         this.skeleton.isGrounded = this.skeleton.body.touching.down;
 
+        //time change scene implementation
+        // if(this.timeScene1 > 0){
+        //     this.timeScene1 -= delta;
+        // }
+        // else{
+        //     this.changeScene = true;
+        // }
+
+        // if(this.changeScene == true){
+        //     this.talltrees = this.add.tileSprite(0, 0, 1200, 700, 'play_bg').setOrigin(0,0);
+        // }
+
 	    // movement left right for player 
         if(cursors.left.isDown) {
             this.cat.setVelocityX(-350);
             // Animation and arrow key tinting
             this.cat.setFlip(true, false);
-            //this.cat.anims.play('cat_run',true);
+            this.cat.anims.play('cat_run',true);
             this.leftKey.tint = 0xFACADE;   // tint key
         } else if(cursors.right.isDown) {
             this.cat.setVelocityX(350);
@@ -206,8 +242,9 @@ class Play extends Phaser.Scene {
             // this.cat.anims.play('cat_run',true);
 	    	this.jumps = this.MAX_JUMPS;
 	    	this.jumping = false;
+            this.cat.anims.play('cat_run',true);
 	    } else {
-	    	this.cat.anims.play('jump');
+	    	this.cat.anims.play('cat_jump', true);
             this.skeleton.anims.play('jump');
 	    }
         // allow steady velocity change up to a certain key down duration
@@ -216,6 +253,7 @@ class Play extends Phaser.Scene {
             this.skeleton.body.velocity.y = this.JUMP_VELOCITY;
 	        this.jumping = true;
 	        this.upKey.tint = 0xFACADE;
+            
 	    } else {
 	    	this.upKey.tint = 0xFFFFFF;
 	    }
