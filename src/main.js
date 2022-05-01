@@ -9,7 +9,7 @@ let config = {
       default: "arcade"
     },
     
-    scene: [ Menu, Play ]
+    scene: [ Menu, Play, Creator, Rule ]
     
   }
 
@@ -27,4 +27,4 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 //Key SPACE is start the game.
-let keySPACE, keyRULE, keyMENU, keyRIGHT, keyLEFT;
+let keySPACE, keyRULE, keyMENU, keyRIGHT, keyLEFT, keyS, KeyW;
