@@ -5,7 +5,22 @@ class Menu extends Phaser.Scene {
 
     preload() {
         // load music audio
-        this.load.image('menuBackground', './assets/menu_bg.png');
+        this.load.image('menuBackground', './assets/menuBackground.png');
+        //audio for skeleton
+        this.load.audio('skeleton_laugh', './assets/skeleton_laugh.mp3');
+
+        //audio for background
+        this.load.audio('bg_music', './assets/bg_music.wav');
+
+        //jump sound
+        this.load.audio('jump_sound', './assets/jump_sound.wav');
+
+        //background image
+       
+
+
+
+
     }
 
     create() {
@@ -25,8 +40,12 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
         
+        //add background music
+        this.music = this.sound.add('bg_music', {mute: false, volume: 1.0, rate: 1, loop: true});
+        this.music.play();
+
         //show background
-        this.add.tileSprite(0, 0, 1500, 850, 'menuBackground').setOrigin(0, 0);
+        this.add.tileSprite(0, 0, 1200, 700, 'menuBackground').setOrigin(0, 0);
 
         // show menu text
         menuConfig.color = '#000';
@@ -46,6 +65,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             //this.sound.play("", { volume: 2.0 });
             //this.sound.play('sfx_select');
+            this.music.stop();
             this.scene.start("playScene");
         }
         if(Phaser.Input.Keyboard.JustDown(keyRULE)){
