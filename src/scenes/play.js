@@ -95,40 +95,47 @@ class Play extends Phaser.Scene {
         //     this.ground.add(groundTile);
         // }
 
+
+
         // make block.
+
+        var math_variable0= Phaser.Math.Between(-300, -600);
         this.block0 = this.add.group();
         for (var i = 0; i <= 300; i++) {
             var Block = this.physics.add.sprite(400, 635,"tool0").setScale(SCALE).setOrigin(0);
             Block.body.immovable =true ;
             Block.body.allowGravity = false;
-            Block.body.setVelocityX(-1000);
+            Block.body.setVelocityX(math_variable0);
             this.block0.add(Block);
         }
 
+        var math_variable1= Phaser.Math.Between(-300, -600);
         this.block1 = this.add.group();
         for (var i = 0; i <= 300; i++) {
             var Block1 = this.physics.add.sprite(650, 545,"tool1").setScale(SCALE).setOrigin(0);
             Block1.body.immovable =true ;
             Block1.body.allowGravity = false;
-            Block1.body.setVelocityX(-1000);
+            Block1.body.setVelocityX(math_variable1);
             this.block1.add(Block1);
         }
         
+        var math_variable2= Phaser.Math.Between(-300, -600);
         this.block2 = this.add.group();
         for (var i = 0; i <= 300; i++) {
             var Block2 = this.physics.add.sprite(900, 570,"tool2").setScale(SCALE).setOrigin(0);
             Block2.body.immovable =true ;
             Block2.body.allowGravity = false;
-            Block2.body.setVelocityX(-1000);
+            Block2.body.setVelocityX(math_variable2);
             this.block2.add(Block2);
         }
 
+        this.math_variable3  = Phaser.Math.Between(-100, -1000);
         this.block3 = this.add.group();
         for (var i = 0; i <= 300; i++) {
             var Block3 = this.physics.add.sprite(1200, 570,"tool3").setScale(SCALE).setOrigin(0);
             Block3.body.immovable =true ;
             Block3.body.allowGravity = false;
-            Block3.body.setVelocityX(-1000);
+            Block3.body.setVelocityX(this.math_variable3);
             this.block3.add(Block3);
         }
 
@@ -208,6 +215,7 @@ class Play extends Phaser.Scene {
             fixedWidth: 200
         }
         
+        this.gameOver = false;
         this.changeScene = false;
         this.playerTime = 0;
 
@@ -227,6 +235,7 @@ class Play extends Phaser.Scene {
 
         // set up Scene switcher
         //this.input.keyboard.on('keydown', sceneSwitcher);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update(time, delta) {
@@ -241,9 +250,11 @@ class Play extends Phaser.Scene {
                 top: 10,
                 bottom: 10,
             },
-            fixedWidth: 200
+            //fixedWidth: 
         }
         
+        this.math_variable3 = Phaser.Math.Between(-100, -1000);
+
         //this.sceneTime -= delta;
         this.playerTime += delta;
         this.timeLeft.text = (this.playerTime/1000).toFixed(2);        
@@ -278,35 +289,36 @@ class Play extends Phaser.Scene {
         // }
 
 	    // movement left right for player 
-        if(cursors.left.isDown) {
-            this.cat.setVelocityX(-350);
-            // Animation and arrow key tinting
-            this.cat.setFlip(true, false);
-            this.cat.anims.play('cat_run',true);
-            this.leftKey.tint = 0xFACADE;   // tint key
-        } else if(cursors.right.isDown) {
-            this.cat.setVelocityX(350);
-            // Animation and arrow key tinting
-            this.cat.resetFlip();
-            //this.cat.anims.play('cat_run',true);
-            this.rightKey.tint = 0xFACADE;  // tint key
-        }else {
-            // Set alien velocity to zero here (.setVelocityX())
-            this.cat.setVelocityX(0);
+        // if(cursors.left.isDown) {
+        //     this.cat.setVelocityX(-350);
+        //     // Animation and arrow key tinting
+        //     this.cat.setFlip(true, false);
+        //     this.cat.anims.play('cat_run',true);
+        //     this.leftKey.tint = 0xFACADE;   // tint key
+        // } else if(cursors.right.isDown) {
+        //     this.cat.setVelocityX(350);
+        //     // Animation and arrow key tinting
+        //     this.cat.resetFlip();
+        //     //this.cat.anims.play('cat_run',true);
+        //     this.rightKey.tint = 0xFACADE;  // tint key
+        // }else {
+        //     // Set alien velocity to zero here (.setVelocityX())
+        //     this.cat.setVelocityX(0);
 
-            // Animation and arrow key tinting
-            this.leftKey.tint = 0xFFFFFF;   // un-tint keys
-            this.rightKey.tint = 0xFFFFFF;  
-        }
+        //     // Animation and arrow key tinting
+        //     this.leftKey.tint = 0xFFFFFF;   // un-tint keys
+        //     this.rightKey.tint = 0xFFFFFF;  
+        // }
 
         // add cat world wrap line here
         this.physics.world.wrap(this.cat, 0);
+        this.physics.world.wrap(this.skeleton, 0);
 
 
 
         ////////////////////////////////////////////////////////
         // the jump
-	    if(this.cat.isGrounded || this.skeleton.isGrounded) {
+	    if(this.cat.isGrounded || this.skeleton.isGrounded && this.gameOver == false) {
             // this.cat.anims.play('cat_run',true);
 	    	this.jumps = this.MAX_JUMPS;
 	    	this.jumping = false;
@@ -317,8 +329,11 @@ class Play extends Phaser.Scene {
             //this.skeleton.anims.play('jump');
 	    }
         // allow steady velocity change up to a certain key down duration
-	    if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
-	        this.cat.body.velocity.y = this.JUMP_VELOCITY;
+	    if(this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150) && this.gameOver == false) {
+	        if(cursors.right.isDown){
+                this.cat.setVelocityX(15);
+            }
+            this.cat.body.velocity.y = this.JUMP_VELOCITY;
             this.skeleton.body.velocity.y = this.JUMP_VELOCITY;
 	        this.jumping = true;
 	        this.upKey.tint = 0xFACADE;
@@ -329,7 +344,7 @@ class Play extends Phaser.Scene {
 	    	this.upKey.tint = 0xFFFFFF;
 	    }
         // finally, letting go of the UP key subtracts a jump
-	    if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
+	    if(this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up) && this.gameOver == false) {
 	    	this.jumps--;
 	    	this.jumping = false;
 	    }
@@ -337,24 +352,34 @@ class Play extends Phaser.Scene {
             
         }    
 
-        if(this.physics.overlap(this.cat, this.skeleton_end)){            
+        if(this.physics.overlap(this.cat, this.skeleton_end)){
+            this.gameOver == true;
+        }
+
+        if(this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true){            
+            
+            this.block0.clear();
+            this.block1.clear();
+            this.block2.clear();
+            this.block3.clear();
             this.sfx.play();
-             this.block0.clear();
-             this.block1.clear();
-             this.block2.clear();
-            //this.block3.clear();
             // this.cat.destroy();
             // this.skeleton.destroy();
              this.playerTime = 0;
-             this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
+             //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
             this.bgm.stop();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to MENU', scoreConfig).setOrigin(0.5);
-            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-                this.scene.start("playScene");
-            }
-
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to restart', scoreConfig).setOrigin(0.5);
         }
+
+       
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.bgm.stop();
+            this.scene.restart();
+        }
+        
+
+        
 
         //make the broke is loop
         this.physics.world.wrap(this.block0, 0);

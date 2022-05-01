@@ -5,7 +5,7 @@ class Menu extends Phaser.Scene {
 
     preload() {
         // load music audio
-        this.load.image('menuBackground', './assets/intro1.png');
+        this.load.image('menuBackground', './assets/menuBackground.png');
         //audio for skeleton
         this.load.audio('skeleton_laugh', './assets/skeleton_laugh.mp3');
         //audio for background
@@ -58,14 +58,18 @@ class Menu extends Phaser.Scene {
     update() {
         //Space to start the game
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.music.stop();
             this.scene.start("playScene");
         }
         //W for rule page
         if(Phaser.Input.Keyboard.JustDown(KeyW)){
+            this.music.stop();
             this.scene.start("ruleScene");
         }
         //S for rule page
         if(Phaser.Input.Keyboard.JustDown(keyS)){
+            //this.music.play();
+            this.music.stop();
             this.scene.start("creatorScene");
         }
         } 
