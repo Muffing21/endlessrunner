@@ -169,7 +169,7 @@ class Play extends Phaser.Scene {
         
         // set up my cat son
         this.cat = this.physics.add.sprite(800, game.config.height/2-tileSize, 'cat_run').setScale(SCALE);
-        this.cat.anims.play('cat_run');
+        this.cat.anims.play('cat_run'); 
         
         this.skeleton.anims.play('skeleton_run');
         //this.skeleton = this.physics.add.sprite(120, game.config.height/2-tileSize, 'skeleton_run').setScale(SCALE);
@@ -240,6 +240,8 @@ class Play extends Phaser.Scene {
 
     update(time, delta) {
 
+        this.skeleton.body.enabled = true;
+
         let scoreConfig = {
             fontFamily: 'serif',
             fontSize: '28px',
@@ -256,17 +258,19 @@ class Play extends Phaser.Scene {
         this.math_variable3 = Phaser.Math.Between(-100, -1000);
 
         //this.sceneTime -= delta;
-        this.playerTime += delta;
-        this.timeLeft.text = (this.playerTime/1000).toFixed(2);        
+        if(this.gameOver == false && this.skeleton.body.enabled == true){ 
+            this.playerTime += delta;
+            this.timeLeft.text = (this.playerTime/1000).toFixed(2);
+        }        
         // if(this.sceneTime % 10000 == 0){
         //     this.changeScene == true;
         //     console.log(changeScene);
         // }
         // console.log(sceneTime);
 
-        // if(this.timeScene % 10000 == 0 && this.changeScene == true){
-        //     this.talltrees.setTexture('play_bg2');
-        // }
+         if(this.playerTime >= 10000){
+             this.talltrees.setTexture('play_bg2');
+            }
         
         // update tile sprites (tweak for more "speed")
         this.talltrees.tilePositionX += this.SCROLL_SPEED;
@@ -318,7 +322,7 @@ class Play extends Phaser.Scene {
 
         ////////////////////////////////////////////////////////
         // the jump
-	    if(this.cat.isGrounded || this.skeleton.isGrounded && this.gameOver == false) {
+	    if((this.cat.isGrounded || this.skeleton.isGrounded) && this.gameOver == false) {
             // this.cat.anims.play('cat_run',true);
 	    	this.jumps = this.MAX_JUMPS;
 	    	this.jumping = false;
@@ -348,9 +352,9 @@ class Play extends Phaser.Scene {
 	    	this.jumps--;
 	    	this.jumping = false;
 	    }
-        if(this.physics.overlap(this.cat, this.skeleton_end)){
+        // if(this.physics.overlap(this.cat, this.skeleton_end)){
             
-        }    
+        // }    
 
         if(this.physics.overlap(this.cat, this.skeleton_end)){
             this.gameOver == true;
@@ -363,8 +367,8 @@ class Play extends Phaser.Scene {
             this.block2.clear();
             this.block3.clear();
             this.sfx.play();
-            // this.cat.destroy();
-            // this.skeleton.destroy();
+            //this.cat.destroy();
+            this.skeleton.body.enabled == false;
              this.playerTime = 0;
              //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
             this.bgm.stop();

@@ -26,8 +26,8 @@ class Rule extends Phaser.Scene {
 
         let text1Config = {
             fontFamily: 'Pangolin',
-            fontSize: '24px',
-            color: '#98fb98',
+            fontSize: '28px',
+            color: '#FFA500',
             align: 'right',
         }
         
@@ -39,7 +39,7 @@ class Rule extends Phaser.Scene {
             strokeThickness: 3,
             align: 'left',
             fixedWidth: 0,
-        }
+        } 
 
         //menu text UI
         let centerX = game.config.width / 2;
