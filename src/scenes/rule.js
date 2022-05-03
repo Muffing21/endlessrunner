@@ -46,16 +46,17 @@ class Rule extends Phaser.Scene {
         let centerY = game.config.height / 2;
 
         //'Character will keep running until you are caught by the skeleton!'
-        this.add.text(centerX, centerY -300, 'You went to a house on a forest during the Halloween', titleConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY -250, 'You saw a Big Skeleton is following at You!', titleConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY -200, 'Your Goal is: Run! Run! Run!', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY -300, 'Le Cat is traversing through the forest at Halloween midnight.', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY -250, 'Suddenly... a skeleton is chasing you. You seek shelter in a nearby house but it is haunted!', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY -200, ' Your Goal is: Run! Run! Run!', titleConfig).setOrigin(0.5);
 
         this.add.image(centerX - 100, centerY - 100, 'skeleton_run').setOrigin(0.5);
         this.add.image(centerX + 100, centerY - 100, 'cat_run').setOrigin(0.5);
 
         this.add.text(centerX, centerY, 'Character will keep running until you are caught by the skeleton!', text1Config).setOrigin(0.5);
-        this.add.text(centerX, centerY + 50, 'The Game offer a Timer inside the yellow block.', text1Config).setOrigin(0.5);
-        this.add.text(centerX, centerY + 100, 'You Just need to Press Up key to jump', text1Config).setOrigin(0.5);
+        this.add.text(centerX, centerY + 50, 'The Game score is determined by how long you have survived in seconds.', text1Config).setOrigin(0.5);
+        text1Config.color = '#FFFFFF';
+        this.add.text(centerX-50, centerY + 100, 'You Press Up arrow to jump AND hold the right arrow to move forward while jumping.', text1Config).setOrigin(0.5);
     
         //this.add.image(centerX - 160, 80, 'character').setScale(0.7).setOrigin(0.5);
         //type space to play

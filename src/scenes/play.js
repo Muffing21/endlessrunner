@@ -19,8 +19,14 @@ class Play extends Phaser.Scene {
         this.load.image('play_bg', './assets/playBackground.png');
         this.load.image('play_bg2', './assets/play_bg2.png');
 
-        //jump sound
+        //spider
+        this.load.image('sp', './assets/sp.png');
         
+        //pumpkin
+        this.load.image('pk', './assets/pk.png');
+
+        //blackcat
+        this.load.image('blackcat', './assets/blackcat.png');
 
 
         //image for block
@@ -101,42 +107,42 @@ class Play extends Phaser.Scene {
 
         var math_variable0= Phaser.Math.Between(-300, -600);
         this.block0 = this.add.group();
-        for (var i = 0; i <= 300; i++) {
-            var Block = this.physics.add.sprite(400, 635,"tool0").setScale(SCALE).setOrigin(0);
-            Block.body.immovable =true ;
-            Block.body.allowGravity = false;
-            Block.body.setVelocityX(math_variable0);
-            this.block0.add(Block);
+        this.Block = this.physics.add.sprite(400, 635,"tool0").setScale(SCALE).setOrigin(0);
+        for (var i = 0; i <= 300; i++) { 
+            this.Block.body.immovable =true ;
+            this.Block.body.allowGravity = false;
+            this.Block.body.setVelocityX(math_variable0);
+            this.block0.add(this.Block);
         }
 
         var math_variable1= Phaser.Math.Between(-300, -600);
         this.block1 = this.add.group();
-        for (var i = 0; i <= 300; i++) {
-            var Block1 = this.physics.add.sprite(650, 545,"tool1").setScale(SCALE).setOrigin(0);
-            Block1.body.immovable =true ;
-            Block1.body.allowGravity = false;
-            Block1.body.setVelocityX(math_variable1);
-            this.block1.add(Block1);
+        this.Block1 = this.physics.add.sprite(650, 545,"tool1").setScale(SCALE).setOrigin(0);
+        for (var i = 0; i <= 300; i++) { 
+            this.Block1.body.immovable =true ;
+            this.Block1.body.allowGravity = false;
+            this.Block1.body.setVelocityX(math_variable1);
+            this.block1.add(this.Block1);
         }
         
         var math_variable2= Phaser.Math.Between(-300, -600);
         this.block2 = this.add.group();
+        this.Block2 = this.physics.add.sprite(900, 570,"tool2").setScale(SCALE).setOrigin(0);
         for (var i = 0; i <= 300; i++) {
-            var Block2 = this.physics.add.sprite(900, 570,"tool2").setScale(SCALE).setOrigin(0);
-            Block2.body.immovable =true ;
-            Block2.body.allowGravity = false;
-            Block2.body.setVelocityX(math_variable2);
-            this.block2.add(Block2);
+            this.Block2.body.immovable = true;
+            this.Block2.body.allowGravity = false;
+            this.Block2.body.setVelocityX(math_variable2);
+            this.block2.add(this.Block2);
         }
 
         this.math_variable3  = Phaser.Math.Between(-100, -1000);
         this.block3 = this.add.group();
+        this.Block3 = this.physics.add.sprite(1200, 570,"tool3").setScale(SCALE).setOrigin(0);
         for (var i = 0; i <= 300; i++) {
-            var Block3 = this.physics.add.sprite(1200, 570,"tool3").setScale(SCALE).setOrigin(0);
-            Block3.body.immovable =true ;
-            Block3.body.allowGravity = false;
-            Block3.body.setVelocityX(this.math_variable3);
-            this.block3.add(Block3);
+            this.Block3.body.immovable =true ;
+            this.Block3.body.allowGravity = false;
+            this.Block3.body.setVelocityX(this.math_variable3);
+            this.block3.add(this.Block3);
         }
 
         this.skeleton_end = this.add.group();
@@ -205,7 +211,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'serif',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#A020F0',
             color: '#843605',
             align: 'right',
             padding: {
@@ -219,7 +225,8 @@ class Play extends Phaser.Scene {
         this.changeScene = false;
         this.playerTime = 0;
 
-        this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
+        scoreConfig.color = '#FFFF00';
+        this.timeLeft = this.add.text(borderPadding + borderUISize*20, borderUISize + borderPadding/10, this.playerTime, scoreConfig);
         
         // jump sound
         this.jump_music = this.sound.add('jump_sound', {mute: false, volume: 0.2, rate: 1, loop: false});
@@ -240,7 +247,7 @@ class Play extends Phaser.Scene {
 
     update(time, delta) {
 
-        this.skeleton.body.enabled = true;
+        //\this.skeleton.body.enabled = true;
 
         let scoreConfig = {
             fontFamily: 'serif',
@@ -255,21 +262,22 @@ class Play extends Phaser.Scene {
             //fixedWidth: 
         }
         
-        this.math_variable3 = Phaser.Math.Between(-100, -1000);
-
         //this.sceneTime -= delta;
-        if(this.gameOver == false && this.skeleton.body.enabled == true){ 
+        if(this.gameOver == false){ 
+            // this.skeleton.body.enabled == true
             this.playerTime += delta;
             this.timeLeft.text = (this.playerTime/1000).toFixed(2);
         }        
-        // if(this.sceneTime % 10000 == 0){
-        //     this.changeScene == true;
-        //     console.log(changeScene);
-        // }
-        // console.log(sceneTime);
 
-         if(this.playerTime >= 10000){
+         if(this.playerTime >= 20000){
              this.talltrees.setTexture('play_bg2');
+             this.Block.setTexture('sp');
+             this.Block.setY(500);
+             this.Block1.setTexture('pk');
+             this.Block1.setY(600);
+             this.Block2.setTexture('blackcat');
+             this.Block3.setTexture('sp');
+             this.Block3.setY(450);
             }
         
         // update tile sprites (tweak for more "speed")
@@ -291,7 +299,7 @@ class Play extends Phaser.Scene {
         // if(this.changeScene == true){
         //     this.talltrees = this.add.tileSprite(0, 0, 1200, 700, 'play_bg').setOrigin(0,0);
         // }
-
+        this.rightKey.tint = 0xFFFFFF;
 	    // movement left right for player 
         // if(cursors.left.isDown) {
         //     this.cat.setVelocityX(-350);
@@ -299,24 +307,20 @@ class Play extends Phaser.Scene {
         //     this.cat.setFlip(true, false);
         //     this.cat.anims.play('cat_run',true);
         //     this.leftKey.tint = 0xFACADE;   // tint key
-        // } else if(cursors.right.isDown) {
-        //     this.cat.setVelocityX(350);
-        //     // Animation and arrow key tinting
-        //     this.cat.resetFlip();
-        //     //this.cat.anims.play('cat_run',true);
-        //     this.rightKey.tint = 0xFACADE;  // tint key
-        // }else {
-        //     // Set alien velocity to zero here (.setVelocityX())
-        //     this.cat.setVelocityX(0);
+             if(cursors.right.isDown) {
+             // Animation and arrow key tinting
+            this.rightKey.tint = 0xFACADE;  // tint key
+            
+            }
 
         //     // Animation and arrow key tinting
         //     this.leftKey.tint = 0xFFFFFF;   // un-tint keys
-        //     this.rightKey.tint = 0xFFFFFF;  
+               
         // }
 
         // add cat world wrap line here
-        this.physics.world.wrap(this.cat, 0);
-        this.physics.world.wrap(this.skeleton, 0);
+        // this.physics.world.wrap(this.cat, 0);
+        // this.physics.world.wrap(this.skeleton, 0);
 
 
 
@@ -360,7 +364,7 @@ class Play extends Phaser.Scene {
             this.gameOver == true;
         }
 
-        if(this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true){            
+        if((this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true) || this.cat.x <= this.skeleton.x){            
             
             this.block0.clear();
             this.block1.clear();
@@ -368,7 +372,7 @@ class Play extends Phaser.Scene {
             this.block3.clear();
             this.sfx.play();
             //this.cat.destroy();
-            this.skeleton.body.enabled == false;
+            //this.skeleton.body.enabled == false;
              this.playerTime = 0;
              //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
             this.bgm.stop();

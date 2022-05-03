@@ -45,13 +45,13 @@ class Creator extends Phaser.Scene {
         this.add.text(centerX, centerY/3+90, 'Code Programmer:', titleConfig).setOrigin(0.5);
         this.add.text(centerX, centerY/3+130, 'ZhiBin Huang,  Wichapas Pichetpongsa', text1Config).setOrigin(0.5);
 
-        this.add.text(centerX, centerY-40, 'Sound Effect:', titleConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Yunhan Wei', text1Config).setOrigin(0.5);
+        // this.add.text(centerX, centerY-40, 'Sound Effect:', titleConfig).setOrigin(0.5);
+        // this.add.text(centerX, centerY, 'Yunhan Wei', text1Config).setOrigin(0.5);
 
-        this.add.text(centerX, centerY+45, 'The Game Art:', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY+45, 'Game Art:', titleConfig).setOrigin(0.5);
         this.add.text(centerX, centerY+85, 'Amanda Bahadori', text1Config).setOrigin(0.5);
 
-        this.add.text(centerX, centerY+130, 'Music:', titleConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY+130, 'Music and SFX:', titleConfig).setOrigin(0.5);
         this.add.text(centerX, centerY+170, 'Yunhan Wei', text1Config).setOrigin(0.5);
         
         //type space to play

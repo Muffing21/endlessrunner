@@ -19,7 +19,8 @@ class Menu extends Phaser.Scene {
         let titleConfig1 = {
             fontFamily: 'Pangolin',
             fontSize: '64px',
-            color: '#ffa90a',
+            backgroundColor: '#39FF14',
+            color: '#ff8c00',
             align: 'right',
         }
 
@@ -42,10 +43,10 @@ class Menu extends Phaser.Scene {
         this.add.tileSprite(0, 0, 1200, 700, 'menuBackground').setOrigin(0, 0);
 
         // show menu text
-        this.add.text(centerX, centerY/3 - borderUISize - borderPadding, 'Welcome to Eternal Halloween!', titleConfig1).setOrigin(0.5);
-        this.add.text(centerX, centerY/2 + 100, 'Press S for game creator', titleConfig2).setOrigin(0.5);
-        this.add.text(centerX, centerY/2 + 50, 'Press W to Rule', titleConfig2).setOrigin(0.5);
-        this.add.text(centerX, centerY/2 + 0, 'Press SPACE to play', titleConfig2).setOrigin(0.5);
+        this.add.text(centerX, centerY/3 - borderUISize - borderPadding, 'Eternal Halloween', titleConfig1).setOrigin(0.5);
+        this.add.text(centerX, centerY/2 + 100, 'Press S for Credits', titleConfig2).setOrigin(0.5);
+        this.add.text(centerX, centerY/2 + 50, 'Press W for Game Introduction', titleConfig2).setOrigin(0.5);
+        this.add.text(centerX, centerY/2 + 0, 'Press SPACE to Play', titleConfig2).setOrigin(0.5);
 
         // define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
