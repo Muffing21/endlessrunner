@@ -1,7 +1,7 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
-        this.gameOver = false;
+        
         
     }
 
@@ -198,15 +198,15 @@ class Play extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         // add physics collider
-        this.physics.add.collider(this.cat, this.ground);
-        this.physics.add.collider(this.skeleton, this.ground);
+        this.physics.add.collider(this.catCollide, this.ground);
+        this.physics.add.collider(this.skeleton_end, this.ground);
 
         
-        this.physics.add.collider(this.cat, this.block0);
-        this.physics.add.collider(this.cat, this.block1);
-        this.physics.add.collider(this.cat, this.block2);
-        this.physics.add.collider(this.cat, this.block3);
-        this.physics.add.collider(this.cat, this.skeleton_end);
+        this.physics.add.collider(this.catCollide, this.block0);
+        this.physics.add.collider(this.catCollide, this.block1);
+        this.physics.add.collider(this.catCollide, this.block2);
+        this.physics.add.collider(this.catCollide, this.block3);
+        this.physics.add.collider(this.catCollide, this.skeleton_end);
 
         let scoreConfig = {
             fontFamily: 'serif',
@@ -231,18 +231,11 @@ class Play extends Phaser.Scene {
         // jump sound
         this.jump_music = this.sound.add('jump_sound', {mute: false, volume: 0.2, rate: 1, loop: false});
 
-        // if(this.timeScene1 <= 0){
-        //     this.clock = this.time.delayedCall(this.p1Time, () => {
-        //         // 45-second play clock
-        //         game.settings.gameTimer
-        //         scoreConfig.fixedWidth = 0;
-        //     }, null, this);    
-        // }
-
 
         // set up Scene switcher
         //this.input.keyboard.on('keydown', sceneSwitcher);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q)
     }
 
     update(time, delta) {
@@ -252,7 +245,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'serif',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#ADD8E6',
             color: '#843605',
             align: 'right',
             padding: {
@@ -263,7 +256,7 @@ class Play extends Phaser.Scene {
         }
         
         //this.sceneTime -= delta;
-        if(this.gameOver == false){ 
+        if(this.gameOver == false && !(this.physics.overlap(this.cat, this.skeleton_end))){ 
             // this.skeleton.body.enabled == true
             this.playerTime += delta;
             this.timeLeft.text = (this.playerTime/1000).toFixed(2);
@@ -364,8 +357,7 @@ class Play extends Phaser.Scene {
             this.gameOver == true;
         }
 
-        if((this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true) || this.cat.x <= this.skeleton.x){            
-            
+        if((this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true) || this.cat.x <= this.skeleton.x || this.cat.x < 0 || this.skeleton.x < 0){           
             this.block0.clear();
             this.block1.clear();
             this.block2.clear();
@@ -377,13 +369,19 @@ class Play extends Phaser.Scene {
              //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
             this.bgm.stop();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to restart', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to Restart', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 128, 'Press Q to Go Back to Menu', scoreConfig).setOrigin(0.5);
         }
 
        
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.bgm.stop();
             this.scene.restart();
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keyQ)){
+            this.bgm.stop();
+            this.scene.start('menuScene');
         }
         
 
