@@ -255,8 +255,8 @@ class Play extends Phaser.Scene {
             //fixedWidth: 
         }
         
-        //this.sceneTime -= delta;
-        if(this.gameOver == false && !(this.physics.overlap(this.cat, this.skeleton_end))){ 
+        //&& !(this.physics.overlap(this.cat, this.skeleton_end))
+        if(this.gameOver == false ){ 
             // this.skeleton.body.enabled == true
             this.playerTime += delta;
             this.timeLeft.text = (this.playerTime/1000).toFixed(2);
@@ -278,8 +278,10 @@ class Play extends Phaser.Scene {
         this.groundScroll.tilePositionX += this.SCROLL_SPEED;
 
 		// check if cat is grounded
-	    this.cat.isGrounded = this.cat.body.touching.down;
-        this.skeleton.isGrounded = this.skeleton.body.touching.down;
+            this.cat.isGrounded = this.cat.body.touching.down;
+            this.skeleton.isGrounded = this.skeleton.body.touching.down;
+        
+        
 
         //time change scene implementation
         // if(this.timeScene1 > 0){
@@ -334,6 +336,9 @@ class Play extends Phaser.Scene {
 	        if(cursors.right.isDown){
                 this.cat.setVelocityX(15);
             }
+            else{
+                this.cat.setVelocityX(0);
+            }
             this.cat.body.velocity.y = this.JUMP_VELOCITY;
             this.skeleton.body.velocity.y = this.JUMP_VELOCITY;
 	        this.jumping = true;
@@ -357,22 +362,28 @@ class Play extends Phaser.Scene {
             this.gameOver == true;
         }
 
-        if((this.physics.overlap(this.cat, this.skeleton_end) || this.gameOver == true) || this.cat.x <= this.skeleton.x || this.cat.x < 0 || this.skeleton.x < 0){           
+        if(this.physics.overlap(this.cat, this.skeleton_end) || this.cat.x <= this.skeleton.x || this.cat.x < 0 || this.skeleton.x < 0){           
+            this.gameOver == true;
             this.block0.clear();
             this.block1.clear();
             this.block2.clear();
             this.block3.clear();
             this.sfx.play();
-            //this.cat.destroy();
-            //this.skeleton.body.enabled == false;
-             this.playerTime = 0;
-             //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, this.playerTime, scoreConfig);
+            this.catCollide.killAndHide(this.cat);
+            this.skeleton_end.killAndHide(this.skeleton);
+            //this.timeLeft.text = (this.playerTime/1000).toFixed(2);
+            //this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, temp, scoreConfig);
+            this.playerTime = 0;
             this.bgm.stop();
+            this.timeLeft.setText("0.00");
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press SPACE to Restart', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 128, 'Press Q to Go Back to Menu', scoreConfig).setOrigin(0.5);
         }
 
+        if(this.gameOver == true){
+            this.timeLeft = this.add.text(borderPadding + borderUISize*10, borderUISize + borderPadding, temp, scoreConfig);
+        }
        
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.bgm.stop();

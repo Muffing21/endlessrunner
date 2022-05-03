@@ -56,11 +56,14 @@ class Rule extends Phaser.Scene {
         this.add.text(centerX, centerY, 'Character will keep running until you are caught by the skeleton!', text1Config).setOrigin(0.5);
         this.add.text(centerX, centerY + 50, 'The Game score is determined by how long you have survived in seconds.', text1Config).setOrigin(0.5);
         text1Config.color = '#FFFFFF';
-        this.add.text(centerX-50, centerY + 100, 'You Press Up arrow to jump AND hold the right arrow to move forward while jumping.', text1Config).setOrigin(0.5);
+        this.add.text(centerX, centerY + 100, 'Up Arrow Once: jump', text1Config).setOrigin(0.5);
+        this.add.text(centerX, centerY + 150, 'Up Arrow Twice: double jump', text1Config).setOrigin(0.5);
+        this.add.text(centerX, centerY + 200, 'Hold Right Arrow: always, to move right slightly when jumping', text1Config).setOrigin(0.5);
+        
     
         //this.add.image(centerX - 160, 80, 'character').setScale(0.7).setOrigin(0.5);
         //type space to play
-        this.add.text(centerX, centerY + 200, '[ Press (SPACE) to Return ]', creditConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY + 250, '[ Press (SPACE) to Return ]', creditConfig).setOrigin(0.5);
         
         //keyboard input
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
